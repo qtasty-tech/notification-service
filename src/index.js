@@ -4,7 +4,7 @@ const notificationRoutes = require('./routes/notificationRoutes');
 require('dotenv').config();
 
 const app = express();
-const PORT = process.env.PORT || 8001;
+const PORT = process.env.PORT || 8083;
 
 app.use(express.json()); // To parse JSON bodies
 
