@@ -1,17 +1,24 @@
-const twilio = require('twilio');
-const client = new twilio(process.env.TWILIO_SID, process.env.TWILIO_AUTH_TOKEN); // mewa arn dpn
+const nodemailer = require('nodemailer');
 
-const sendNotification = async (userId, message) => {
-  
-  const user = await User.findById(userId); 
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS
+  }
+});
 
-  const response = await client.messages.create({
-    body: message,
-    from: process.env.TWILIO_PHONE_NUMBER,
-    to: user.phone, 
-  });
+const sendNotification = async (userEmail, message) => {
+  const mailOptions = {
+    from: process.env.EMAIL_USER,
+    to: userEmail,
+    subject: 'Notification',
+    text: message
+  };
 
-  return { success: true, message: 'Notification sent successfully', response };
+  await transporter.sendMail(mailOptions);
+
+  return { message: 'Email sent successfully' };
 };
 
 module.exports = { sendNotification };
